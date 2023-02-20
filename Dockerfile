@@ -1,9 +1,7 @@
-FROM openjdk
+FROM maven:3.8.1-jdk-11-slim AS build
 
-WORKDIR /app
+COPY ./ ./
 
-COPY target/produto-ms-0.0.1-SNAPSHOT.jar /app/produto-ms.jar
+RUN mvn clean install -DskipTests
 
-ENTRYPOINT ["java", "-jar", "produto-ms.jar"]
-
-EXPOSE 9999
+CMD ["java", "-jar", "target/produto-ms-0.0.1-SNAPSHOT.jar"]
