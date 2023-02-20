@@ -23,4 +23,5 @@ public class PedidoResponse {
     private List<ItemPedido> itemPedido;
     private SituacaoPedido situacaoPedido;
     private BigDecimal percentualDesconto;
+    private BigDecimal valorPedido;
 }

@@ -1,14 +1,11 @@
 package br.com.matheusassmann.produtoms.dto.request;
 
-import br.com.matheusassmann.produtoms.domain.enums.SituacaoPedido;
-import br.com.matheusassmann.produtoms.domain.model.ItemPedido;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
@@ -24,12 +21,9 @@ public class PedidoRequest {
 
     private UUID id;
 
-    private List<ItemPedido> itemPedido;
+    private List<ProdutoPedidoRequest> produtos;
 
-    @NotBlank(message = "nao pode ser vazio ou nulo")
-    private SituacaoPedido situacaoPedido;
-
-    @Positive(message = "deve ser maior que 0 e um valor positivo")
-    @NotNull(message = "nao pode ser nulo")
-    private BigDecimal percentualDesconto;
+//    @Positive(message = "deve ser maior que 0 e um valor positivo")
+//    @NotNull(message = "nao pode ser nulo")
+//    private BigDecimal percentualDesconto;
 }
