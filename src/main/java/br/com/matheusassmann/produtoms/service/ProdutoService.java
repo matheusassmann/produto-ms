@@ -5,9 +5,10 @@ import br.com.matheusassmann.produtoms.dto.request.ProdutoRequest;
 import br.com.matheusassmann.produtoms.repository.ProdutoRepository;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -17,12 +18,11 @@ public class ProdutoService {
     private ProdutoRepository repository;
 
     public Produto findById(UUID id) {
-        Produto obj = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Produto nao encontrado!"));
-        return obj;
+        return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Produto nao encontrado!"));
     }
 
-    public List<Produto> findAll() {
-        return repository.findAll();
+    public Page<Produto> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public Produto save(ProdutoRequest productRequest) {

@@ -1,6 +1,7 @@
 package br.com.matheusassmann.produtoms.dto.response;
 
-import br.com.matheusassmann.produtoms.domain.enums.SituacaoProduto;
+import br.com.matheusassmann.produtoms.domain.enums.SituacaoPedido;
+import br.com.matheusassmann.produtoms.domain.model.ItemPedido;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -15,12 +17,10 @@ import java.util.UUID;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProdutoResponse {
+public class PedidoResponse {
 
     private UUID id;
-    private String nome;
-    private String descricao;
-    private BigDecimal preco;
-    private Boolean isService;
-    private SituacaoProduto situacaoProduto;
+    private List<ItemPedido> itemPedido;
+    private SituacaoPedido situacaoPedido;
+    private BigDecimal percentualDesconto;
 }

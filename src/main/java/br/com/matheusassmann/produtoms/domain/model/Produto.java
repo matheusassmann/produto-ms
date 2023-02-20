@@ -1,5 +1,6 @@
 package br.com.matheusassmann.produtoms.domain.model;
 
+import br.com.matheusassmann.produtoms.domain.enums.SituacaoProduto;
 import br.com.matheusassmann.produtoms.dto.request.ProdutoRequest;
 import br.com.matheusassmann.produtoms.dto.response.ProdutoResponse;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -38,7 +41,10 @@ public class Produto {
 
     private BigDecimal preco;
 
-    private boolean isService;
+    private Boolean isService;
+
+    @Enumerated(EnumType.STRING)
+    private SituacaoProduto situacaoProduto;
 
     public static Produto from(ProdutoRequest request) {
         return Produto.builder()
@@ -46,7 +52,8 @@ public class Produto {
                 .nome(request.getNome())
                 .descricao(request.getDescricao())
                 .preco(request.getPreco())
-                .isService(request.isService())
+                .isService(request.getIsService())
+                .situacaoProduto(SituacaoProduto.ATIVO)
                 .build();
     }
 
@@ -56,7 +63,8 @@ public class Produto {
                 .nome(produto.getNome())
                 .descricao(produto.getDescricao())
                 .preco(produto.getPreco())
-                .isService(produto.isService())
+                .isService(produto.getIsService())
+                .situacaoProduto(produto.situacaoProduto)
                 .build();
     }
 

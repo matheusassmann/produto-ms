@@ -1,9 +1,7 @@
 ![Swagger Api image](./images/senior-logo.png)
-# Product-ms
+# Produto-ms
 
 Projeto desenvolvido como parte do processo seletivo da Senior Sistemas.
-
-## Como executar?
 
 #### Tecnologias utilizadas:
 Para o desenvolvimento desta aplicação, foram utilizadas as seguintes tecnologias:
@@ -14,6 +12,7 @@ Para o desenvolvimento desta aplicação, foram utilizadas as seguintes tecnolog
 - Spring Boot
 - JPA
 
+## Como executar?
 #### Ferramentas necessárias:
 - [Docker for Windows](https://docs.docker.com/desktop/windows/install/ "Download Docker").
 - [Postman](https://www.postman.com/downloads/ "Download Postman")

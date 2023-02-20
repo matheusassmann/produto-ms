@@ -18,16 +18,16 @@ services:
     volumes:
       - produto-ms-data:/var/lib/postgresql
 
-  produto-ms:
-    build:
-      dockerfile: ./Dockerfile
-      context: .
-    image: senior/produto-ms
-    container_name: senior-produto-ms
-    ports:
-      - "9999:9999"
-    depends_on:
-      - "produto-ms-postgres"
+#  produto-ms:
+#    build:
+#      dockerfile: ./Dockerfile
+#      context: .
+#    image: senior/produto-ms
+#    container_name: senior-produto-ms
+#    ports:
+#      - "9999:9999"
+#    depends_on:
+#      - "produto-ms-postgres"
 
 networks:
   default:
