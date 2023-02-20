@@ -1,6 +1,7 @@
 package br.com.matheusassmann.produtoms.controller;
 
 import br.com.matheusassmann.produtoms.domain.model.Pedido;
+import br.com.matheusassmann.produtoms.dto.request.FinalizarPedidoRequest;
 import br.com.matheusassmann.produtoms.dto.request.PedidoRequest;
 import br.com.matheusassmann.produtoms.dto.response.PedidoResponse;
 import br.com.matheusassmann.produtoms.mapper.PedidoMapper;
@@ -41,6 +42,13 @@ public class PedidoController {
         return ResponseEntity.created(uri).body(response);
     }
 
+    @PostMapping("/finalizarPedido")
+    @ApiOperation(value = "Finalizar Pedido")
+    public ResponseEntity<Void> finalizar(@RequestBody FinalizarPedidoRequest finalizarPedidoRequest){
+        service.finalizar(finalizarPedidoRequest);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping()
     @ApiOperation(value = "ListAll() Pedidos")
     public ResponseEntity<Page<PedidoResponse>> findAll(Pageable pageable) {
@@ -49,12 +57,12 @@ public class PedidoController {
         return ResponseEntity.ok(response);
     }
 
-//    @GetMapping("/{id}")
-//    @ApiOperation(value = "FindById() Pedido")
-//    public ResponseEntity<PedidoResponse> findById(@PathVariable UUID id) {
-//        Pedido pedido = service.findById(id);
-//        return ResponseEntity.ok().body(Pedido.toResponse(pedido));
-//    }
+    @GetMapping("/{id}")
+    @ApiOperation(value = "FindById() Pedido")
+    public ResponseEntity<PedidoResponse> findById(@PathVariable UUID id) {
+        Pedido pedido = service.findById(id);
+        return ResponseEntity.ok().body(Pedido.toResponse(pedido));
+    }
 
 //    @PutMapping("/{id}")
 //    @ApiOperation(value = "Update() Pedido")
@@ -64,10 +72,10 @@ public class PedidoController {
 //        return ResponseEntity.created(uri).body(Pedido.toResponse(obj));
 //    }
 
-//    @DeleteMapping("/{id}")
-//    @ApiOperation(value = "Delete() Pedido")
-//    public ResponseEntity<Void> delete(@PathVariable UUID id) {
-//        service.delete(id);
-//        return ResponseEntity.ok().build();
-//    }
+    @DeleteMapping("/{id}")
+    @ApiOperation(value = "Delete() Pedido")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        service.delete(id);
+        return ResponseEntity.ok().build();
+    }
 }

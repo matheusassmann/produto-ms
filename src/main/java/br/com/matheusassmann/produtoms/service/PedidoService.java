@@ -1,7 +1,9 @@
 package br.com.matheusassmann.produtoms.service;
 
+import br.com.matheusassmann.produtoms.domain.enums.SituacaoPedido;
 import br.com.matheusassmann.produtoms.domain.model.ItemPedido;
 import br.com.matheusassmann.produtoms.domain.model.Pedido;
+import br.com.matheusassmann.produtoms.dto.request.FinalizarPedidoRequest;
 import br.com.matheusassmann.produtoms.dto.request.PedidoRequest;
 import br.com.matheusassmann.produtoms.exceptions.ProdutoNotFoundException;
 import br.com.matheusassmann.produtoms.mapper.ItemPedidoMapper;
@@ -28,7 +30,7 @@ public class PedidoService {
     private ProdutoRepository produtoRepository;
 
     public Pedido findById(UUID id) {
-        return pedidoRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Pedido nao encontrado!"));
+        return pedidoRepository.findByIdAndSituacaoPedidoIsNotCancelado(id).orElseThrow(() -> new ObjectNotFoundException(id, "Pedido nao encontrado!"));
     }
 
     public Page<Pedido> findAll(Pageable pageable) {
@@ -59,7 +61,14 @@ public class PedidoService {
     }
 
     public void delete(UUID id) {
-        findById(id);
-        pedidoRepository.deleteById(id);
+        Pedido pedido = findById(id);
+        pedido.setSituacaoPedido(SituacaoPedido.CANCELADO);
+        pedidoRepository.save(pedido);
+    }
+
+    public void finalizar(FinalizarPedidoRequest finalizarPedidoRequest) {
+        Pedido pedido = findById(finalizarPedidoRequest.getId());
+        pedido.setSituacaoPedido(SituacaoPedido.FECHADO);
+        pedidoRepository.save(pedido);
     }
 }
