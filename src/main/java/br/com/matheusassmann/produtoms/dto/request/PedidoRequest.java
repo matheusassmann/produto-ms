@@ -1,14 +1,13 @@
 package br.com.matheusassmann.produtoms.dto.request;
 
-import br.com.matheusassmann.produtoms.domain.enums.SituacaoPedido;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Builder
 @Data
@@ -17,14 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PedidoRequest {
 
-    private List<ItemPedidoRequest> itemPedido;
+    private UUID id;
 
-    private SituacaoPedido situacaoPedido;
-
-    private BigDecimal percentualDesconto;
-
-    private BigDecimal valorPedido;
-
+    private List<ProdutoPedidoRequest> produtos;
 }
-
-

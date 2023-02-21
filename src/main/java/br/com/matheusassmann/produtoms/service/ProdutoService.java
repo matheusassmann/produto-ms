@@ -2,9 +2,9 @@ package br.com.matheusassmann.produtoms.service;
 
 import br.com.matheusassmann.produtoms.domain.model.Produto;
 import br.com.matheusassmann.produtoms.dto.request.ProdutoRequest;
+import br.com.matheusassmann.produtoms.exceptions.ObjetoNotFoundException;
 import br.com.matheusassmann.produtoms.mapper.ProdutoMapper;
 import br.com.matheusassmann.produtoms.repository.ProdutoRepository;
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +19,7 @@ public class ProdutoService {
     private ProdutoRepository produtoRepository;
 
     public Produto findById(UUID id) {
-        return produtoRepository.findByIdAndSituacaoProdutoIsNotInativo(id).orElseThrow(() -> new ObjectNotFoundException(id, "Produto nao encontrado!"));
+        return produtoRepository.findByIdAndSituacaoProdutoIsNotInativo(id).orElseThrow(() -> new ObjetoNotFoundException("Produto nao encontrado!"));
     }
 
     public Page<Produto> findAll(Pageable pageable) {

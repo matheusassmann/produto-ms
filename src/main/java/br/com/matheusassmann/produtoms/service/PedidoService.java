@@ -5,14 +5,13 @@ import br.com.matheusassmann.produtoms.domain.enums.SituacaoProduto;
 import br.com.matheusassmann.produtoms.domain.model.ItemPedido;
 import br.com.matheusassmann.produtoms.domain.model.Pedido;
 import br.com.matheusassmann.produtoms.dto.request.AplicaDescontoRequest;
-import br.com.matheusassmann.produtoms.dto.request.CriaPedidoRequest;
+import br.com.matheusassmann.produtoms.dto.request.PedidoRequest;
 import br.com.matheusassmann.produtoms.exceptions.OperacaoInvalidaException;
-import br.com.matheusassmann.produtoms.exceptions.ProdutoNotFoundException;
+import br.com.matheusassmann.produtoms.exceptions.ObjetoNotFoundException;
 import br.com.matheusassmann.produtoms.mapper.ItemPedidoMapper;
 import br.com.matheusassmann.produtoms.mapper.PedidoMapper;
 import br.com.matheusassmann.produtoms.repository.PedidoRepository;
 import br.com.matheusassmann.produtoms.repository.ProdutoRepository;
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,25 +33,25 @@ public class PedidoService {
     private ProdutoRepository produtoRepository;
 
     public Pedido findById(UUID id) {
-        return pedidoRepository.findByIdAndSituacaoPedidoIsNotCancelado(id).orElseThrow(() -> new ObjectNotFoundException(id, "Pedido nao encontrado!"));
+        return pedidoRepository.findByIdAndSituacaoPedidoIsNotCancelado(id).orElseThrow(() -> new ObjetoNotFoundException("Pedido nao encontrado!"));
     }
 
     public Page<Pedido> findAll(Pageable pageable) {
         return pedidoRepository.findAll(pageable);
     }
 
-    public Pedido save(CriaPedidoRequest criaPedidoRequest) {
-        Pedido pedido = criaPedidoHandler(criaPedidoRequest);
+    public Pedido save(PedidoRequest pedidoRequest) {
+        Pedido pedido = criaPedidoHandler(pedidoRequest);
         return pedidoRepository.save(pedido);
     }
 
-    public Pedido update(CriaPedidoRequest criaPedidoRequest, UUID id) {
+    public Pedido update(PedidoRequest pedidoRequest, UUID id) {
         Pedido pedido = findById(id);
         if (!SituacaoPedido.ABERTO.equals(pedido.getSituacaoPedido())){
             throw new OperacaoInvalidaException("É possível alterar apenas pedidos em ABERTO");
         }
-        criaPedidoRequest.setId(id);
-        return pedidoRepository.save(criaPedidoHandler(criaPedidoRequest));
+        pedidoRequest.setId(id);
+        return pedidoRepository.save(criaPedidoHandler(pedidoRequest));
     }
 
     public void delete(UUID id) {
@@ -86,18 +85,18 @@ public class PedidoService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    private Pedido criaPedidoHandler(CriaPedidoRequest criaPedidoRequest) {
+    private Pedido criaPedidoHandler(PedidoRequest pedidoRequest) {
         List<ItemPedido> itens = new ArrayList<>();
 
-        criaPedidoRequest.getProdutos()
+        pedidoRequest.getProdutos()
                 .forEach(p -> {
                     var produto = produtoRepository.findById(p.getId()).filter(s -> s.getSituacaoProduto() != SituacaoProduto.INATIVO)
-                            .orElseThrow(() -> new ProdutoNotFoundException("Produto nao encontrado para o id: " + p.getId()));
+                            .orElseThrow(() -> new ObjetoNotFoundException("Produto nao encontrado para o id: " + p.getId()));
                     itens.add(
                             ItemPedidoMapper.INSTANCE.toItemPedido(produto, p.getQuantidade())
                     );
                 });
 
-        return PedidoMapper.INSTANCE.toPedido(criaPedidoRequest, itens);
+        return PedidoMapper.INSTANCE.toPedido(pedidoRequest, itens);
     }
 }

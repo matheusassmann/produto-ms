@@ -1,7 +1,7 @@
 package br.com.matheusassmann.produtoms.controller;
 
 import br.com.matheusassmann.produtoms.dto.request.AplicaDescontoRequest;
-import br.com.matheusassmann.produtoms.dto.request.CriaPedidoRequest;
+import br.com.matheusassmann.produtoms.dto.request.PedidoRequest;
 import br.com.matheusassmann.produtoms.dto.response.PedidoResponse;
 import br.com.matheusassmann.produtoms.mapper.PedidoMapper;
 import br.com.matheusassmann.produtoms.service.PedidoService;
@@ -33,8 +33,8 @@ public class PedidoController {
     private PedidoService service;
 
     @PostMapping("/criarPedido")
-    public ResponseEntity<PedidoResponse> insert(@RequestBody @Valid CriaPedidoRequest criaPedidoRequest, UriComponentsBuilder uriBuilder) {
-        PedidoResponse response = PedidoMapper.INSTANCE.toPedidoResponse(service.save(criaPedidoRequest));
+    public ResponseEntity<PedidoResponse> insert(@RequestBody @Valid PedidoRequest pedidoRequest, UriComponentsBuilder uriBuilder) {
+        PedidoResponse response = PedidoMapper.INSTANCE.toPedidoResponse(service.save(pedidoRequest));
         URI uri = uriBuilder.path("/pedidos/{id}").buildAndExpand(response.getId()).toUri();
         return ResponseEntity.created(uri).body(response);
     }
@@ -65,8 +65,8 @@ public class PedidoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PedidoResponse> update(@RequestBody @Valid CriaPedidoRequest criaPedidoRequest, @PathVariable UUID id, UriComponentsBuilder uriBuilder) {
-        PedidoResponse response = PedidoMapper.INSTANCE.toPedidoResponse(service.update(criaPedidoRequest, id));
+    public ResponseEntity<PedidoResponse> update(@RequestBody @Valid PedidoRequest pedidoRequest, @PathVariable UUID id, UriComponentsBuilder uriBuilder) {
+        PedidoResponse response = PedidoMapper.INSTANCE.toPedidoResponse(service.update(pedidoRequest, id));
         URI uri = uriBuilder.path("/produtos/{id}").buildAndExpand(id).toUri();
         return ResponseEntity.created(uri).body(response);
     }
