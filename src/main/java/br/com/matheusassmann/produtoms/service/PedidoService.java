@@ -47,10 +47,12 @@ public class PedidoService {
     }
 
     public Pedido update(CriaPedidoRequest criaPedidoRequest, UUID id) {
-        findById(id);
+        Pedido pedido = findById(id);
+        if (!SituacaoPedido.ABERTO.equals(pedido.getSituacaoPedido())){
+            throw new OperacaoInvalidaException("É possível alterar apenas pedidos em ABERTO");
+        }
         criaPedidoRequest.setId(id);
-        Pedido pedido = criaPedidoHandler(criaPedidoRequest);
-        return pedidoRepository.save(pedido);
+        return pedidoRepository.save(criaPedidoHandler(criaPedidoRequest));
     }
 
     public void delete(UUID id) {
