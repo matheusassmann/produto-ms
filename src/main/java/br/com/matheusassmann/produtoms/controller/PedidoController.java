@@ -1,13 +1,11 @@
 package br.com.matheusassmann.produtoms.controller;
 
-import br.com.matheusassmann.produtoms.domain.model.Pedido;
-import br.com.matheusassmann.produtoms.dto.request.AplicarDescontoRequest;
-import br.com.matheusassmann.produtoms.dto.request.PedidoRequest;
+import br.com.matheusassmann.produtoms.dto.request.AplicaDescontoRequest;
+import br.com.matheusassmann.produtoms.dto.request.CriaPedidoRequest;
 import br.com.matheusassmann.produtoms.dto.response.PedidoResponse;
 import br.com.matheusassmann.produtoms.mapper.PedidoMapper;
 import br.com.matheusassmann.produtoms.service.PedidoService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,8 +33,8 @@ public class PedidoController {
     private PedidoService service;
 
     @PostMapping("/criarPedido")
-    public ResponseEntity<PedidoResponse> insert(@RequestBody @Valid PedidoRequest pedidoRequest, UriComponentsBuilder uriBuilder) {
-        PedidoResponse response = PedidoMapper.INSTANCE.toPedidoResponse(service.save(pedidoRequest));
+    public ResponseEntity<PedidoResponse> insert(@RequestBody @Valid CriaPedidoRequest criaPedidoRequest, UriComponentsBuilder uriBuilder) {
+        PedidoResponse response = PedidoMapper.INSTANCE.toPedidoResponse(service.save(criaPedidoRequest));
         URI uri = uriBuilder.path("/pedidos/{id}").buildAndExpand(response.getId()).toUri();
         return ResponseEntity.created(uri).body(response);
     }
@@ -48,28 +46,28 @@ public class PedidoController {
     }
 
     @PostMapping("/aplicarDesconto")
-    public ResponseEntity<Void> aplicarDesconto(@RequestBody @Valid AplicarDescontoRequest aplicarDescontoRequest){
-        service.aplicarDesconto(aplicarDescontoRequest);
+    public ResponseEntity<Void> aplicarDesconto(@RequestBody @Valid AplicaDescontoRequest aplicaDescontoRequest){
+        service.aplicarDesconto(aplicaDescontoRequest);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping()
     public ResponseEntity<Page<PedidoResponse>> findAll(Pageable pageable) {
         Page<PedidoResponse> response = service.findAll(pageable)
-                .map(Pedido::toResponse);
+                .map(PedidoMapper.INSTANCE::toPedidoResponse);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PedidoResponse> findById(@PathVariable UUID id) {
         PedidoResponse response = PedidoMapper.INSTANCE.toPedidoResponse(service.findById(id));
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PedidoResponse> update(@RequestBody @Valid PedidoRequest pedidoRequest, @PathVariable UUID id, UriComponentsBuilder uriBuilder) {
-        PedidoResponse response = PedidoMapper.INSTANCE.toPedidoResponse(service.update(pedidoRequest));
-        URI uri = uriBuilder.path("/produtos/{id}").buildAndExpand(pedidoRequest.getId()).toUri();
+    public ResponseEntity<PedidoResponse> update(@RequestBody @Valid CriaPedidoRequest criaPedidoRequest, @PathVariable UUID id, UriComponentsBuilder uriBuilder) {
+        PedidoResponse response = PedidoMapper.INSTANCE.toPedidoResponse(service.update(criaPedidoRequest, id));
+        URI uri = uriBuilder.path("/produtos/{id}").buildAndExpand(id).toUri();
         return ResponseEntity.created(uri).body(response);
     }
 

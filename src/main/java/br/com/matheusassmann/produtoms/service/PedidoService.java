@@ -4,8 +4,8 @@ import br.com.matheusassmann.produtoms.domain.enums.SituacaoPedido;
 import br.com.matheusassmann.produtoms.domain.enums.SituacaoProduto;
 import br.com.matheusassmann.produtoms.domain.model.ItemPedido;
 import br.com.matheusassmann.produtoms.domain.model.Pedido;
-import br.com.matheusassmann.produtoms.dto.request.AplicarDescontoRequest;
-import br.com.matheusassmann.produtoms.dto.request.PedidoRequest;
+import br.com.matheusassmann.produtoms.dto.request.AplicaDescontoRequest;
+import br.com.matheusassmann.produtoms.dto.request.CriaPedidoRequest;
 import br.com.matheusassmann.produtoms.exceptions.OperacaoInvalidaException;
 import br.com.matheusassmann.produtoms.exceptions.ProdutoNotFoundException;
 import br.com.matheusassmann.produtoms.mapper.ItemPedidoMapper;
@@ -41,26 +41,15 @@ public class PedidoService {
         return pedidoRepository.findAll(pageable);
     }
 
-    public Pedido save(PedidoRequest pedidoRequest) {
-        List<ItemPedido> itens = new ArrayList<>();
-
-        pedidoRequest.getProdutos()
-                .forEach(p -> {
-                    var produto = produtoRepository.findById(p.getId()).filter(s -> s.getSituacaoProduto() != SituacaoProduto.INATIVO)
-                            .orElseThrow(() -> new ProdutoNotFoundException("Produto nao encontrado para o id: " + p.getId()));
-                    itens.add(
-                            ItemPedidoMapper.INSTANCE.toItemPedido(produto, p.getQuantidade())
-                    );
-                });
-
-        var pedido = PedidoMapper.INSTANCE.toPedido(pedidoRequest, itens);
-
+    public Pedido save(CriaPedidoRequest criaPedidoRequest) {
+        Pedido pedido = criaPedidoHandler(criaPedidoRequest);
         return pedidoRepository.save(pedido);
     }
 
-    public Pedido update(PedidoRequest pedidoRequest) {
-        Pedido pedido = findById(pedidoRequest.getId());
-        pedido.setId(pedidoRequest.getId());
+    public Pedido update(CriaPedidoRequest criaPedidoRequest, UUID id) {
+        findById(id);
+        criaPedidoRequest.setId(id);
+        Pedido pedido = criaPedidoHandler(criaPedidoRequest);
         return pedidoRepository.save(pedido);
     }
 
@@ -76,15 +65,37 @@ public class PedidoService {
         pedidoRepository.save(pedido);
     }
 
-    public void aplicarDesconto(AplicarDescontoRequest aplicarDescontoRequest) {
-        Pedido pedido = findById(aplicarDescontoRequest.getId());
+    public void aplicarDesconto(AplicaDescontoRequest aplicaDescontoRequest) {
+        Pedido pedido = findById(aplicaDescontoRequest.getId());
         if (pedido.getSituacaoPedido() != SituacaoPedido.ABERTO) {
             throw new OperacaoInvalidaException("Não é possível aplicar o desconto nesse pedido");
         }
-        pedido.setPercentualDesconto(aplicarDescontoRequest.getPercentualDesconto().setScale(2, RoundingMode.HALF_EVEN));
-        var valorDesconto = pedido.getValorPedido().multiply(aplicarDescontoRequest.getPercentualDesconto().divide(BigDecimal.valueOf(100)));
+        pedido.setPercentualDesconto(aplicaDescontoRequest.getPercentualDesconto().setScale(2, RoundingMode.HALF_EVEN));
+        var valorProdutos = calculaValorProdutos(pedido.getItemPedido());
+        var valorDesconto = valorProdutos.multiply(aplicaDescontoRequest.getPercentualDesconto().divide(BigDecimal.valueOf(100)));
         var novoValor = pedido.getValorPedido().subtract(valorDesconto).setScale(2, RoundingMode.HALF_EVEN);
         pedido.setValorPedido(novoValor);
         pedidoRepository.save(pedido);
+    }
+
+    private BigDecimal calculaValorProdutos(List<ItemPedido> itemPedidos){
+        return itemPedidos.stream().filter(i -> !i.getProduto().getIsService())
+                .map(ItemPedido::getPrecoTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private Pedido criaPedidoHandler(CriaPedidoRequest criaPedidoRequest) {
+        List<ItemPedido> itens = new ArrayList<>();
+
+        criaPedidoRequest.getProdutos()
+                .forEach(p -> {
+                    var produto = produtoRepository.findById(p.getId()).filter(s -> s.getSituacaoProduto() != SituacaoProduto.INATIVO)
+                            .orElseThrow(() -> new ProdutoNotFoundException("Produto nao encontrado para o id: " + p.getId()));
+                    itens.add(
+                            ItemPedidoMapper.INSTANCE.toItemPedido(produto, p.getQuantidade())
+                    );
+                });
+
+        return PedidoMapper.INSTANCE.toPedido(criaPedidoRequest, itens);
     }
 }

@@ -8,6 +8,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
+import java.util.UUID;
+
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ProdutoMapper {
 
@@ -17,7 +19,15 @@ public interface ProdutoMapper {
     @Mapping(target = "descricao", source = "produtoRequest.descricao")
     @Mapping(target = "preco", source = "produtoRequest.preco")
     @Mapping(target = "isService", source = "produtoRequest.isService")
+    @Mapping(target = "situacaoProduto", expression = "java(br.com.matheusassmann.produtoms.domain.enums.SituacaoProduto.ATIVO)")
     Produto toProduto(ProdutoRequest produtoRequest);
+
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "descricao", source = "produtoRequest.descricao")
+    @Mapping(target = "preco", source = "produtoRequest.preco")
+    @Mapping(target = "isService", source = "produtoRequest.isService")
+    @Mapping(target = "situacaoProduto", source = "produtoRequest.situacaoProduto")
+    Produto toProduto(ProdutoRequest produtoRequest, UUID id);
 
     ProdutoResponse toProdutoResponse(Produto produto);
 }

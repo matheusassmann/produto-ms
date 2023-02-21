@@ -1,8 +1,6 @@
 package br.com.matheusassmann.produtoms.domain.model;
 
 import br.com.matheusassmann.produtoms.domain.enums.SituacaoProduto;
-import br.com.matheusassmann.produtoms.dto.request.ProdutoRequest;
-import br.com.matheusassmann.produtoms.dto.response.ProdutoResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,8 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -45,26 +41,4 @@ public class Produto {
 
     @Enumerated(EnumType.STRING)
     private SituacaoProduto situacaoProduto;
-
-    public static Produto from(ProdutoRequest request) {
-        return Produto.builder()
-                .id(request.getId())
-                .nome(request.getNome())
-                .descricao(request.getDescricao())
-                .preco(request.getPreco())
-                .isService(request.getIsService())
-                .situacaoProduto(SituacaoProduto.ATIVO)
-                .build();
-    }
-
-    public static ProdutoResponse toResponse(Produto produto) {
-        return ProdutoResponse.builder()
-                .id(produto.getId())
-                .nome(produto.getNome())
-                .descricao(produto.getDescricao())
-                .preco(produto.getPreco())
-                .isService(produto.getIsService())
-                .situacaoProduto(produto.situacaoProduto)
-                .build();
-    }
 }

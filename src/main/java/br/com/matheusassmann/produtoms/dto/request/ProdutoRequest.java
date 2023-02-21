@@ -34,4 +34,7 @@ public class ProdutoRequest {
 
     @NotNull(message = "nao pode ser nulo")
     private Boolean isService;
+
+    @NotNull(message = "nao pode ser nulo")
+    private SituacaoProduto situacaoProduto;
 }

@@ -1,7 +1,5 @@
 package br.com.matheusassmann.produtoms.controller;
 
-import br.com.matheusassmann.produtoms.config.interfaces.ApiPageable;
-import br.com.matheusassmann.produtoms.domain.model.Produto;
 import br.com.matheusassmann.produtoms.dto.request.ProdutoRequest;
 import br.com.matheusassmann.produtoms.dto.response.ProdutoResponse;
 import br.com.matheusassmann.produtoms.mapper.ProdutoMapper;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -40,24 +37,23 @@ public class ProdutoController {
     }
 
     @GetMapping()
-    @ApiPageable
-    public ResponseEntity<Page<ProdutoResponse>> findAll(@ApiIgnore Pageable pageable) {
+    public ResponseEntity<Page<ProdutoResponse>> findAll(Pageable pageable) {
         Page<ProdutoResponse> response = service.findAll(pageable)
-                .map(Produto::toResponse);
-        return ResponseEntity.noContent().build();
+                .map(ProdutoMapper.INSTANCE::toProdutoResponse);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProdutoResponse> findById(@PathVariable UUID id) {
-        Produto product = service.findById(id);
-        return ResponseEntity.ok().body(Produto.toResponse(product));
+        ProdutoResponse response = ProdutoMapper.INSTANCE.toProdutoResponse(service.findById(id));
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoResponse> update(@RequestBody @Valid ProdutoRequest productRequest, @PathVariable UUID id, UriComponentsBuilder uriBuilder) {
-        Produto obj = service.update(Produto.from(productRequest), id);
-        URI uri = uriBuilder.path("/produtos/{id}").buildAndExpand(productRequest.getId()).toUri();
-        return ResponseEntity.created(uri).body(Produto.toResponse(obj));
+        ProdutoResponse response = ProdutoMapper.INSTANCE.toProdutoResponse(service.update(productRequest, id));
+        URI uri = uriBuilder.path("/produtos/{id}").buildAndExpand(id).toUri();
+        return ResponseEntity.created(uri).body(response);
     }
 
     @DeleteMapping("/{id}")

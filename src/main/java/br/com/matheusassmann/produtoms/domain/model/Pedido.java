@@ -1,7 +1,6 @@
 package br.com.matheusassmann.produtoms.domain.model;
 
 import br.com.matheusassmann.produtoms.domain.enums.SituacaoPedido;
-import br.com.matheusassmann.produtoms.dto.response.PedidoResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,23 +35,14 @@ public class Pedido {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "pedido_id")
     private List<ItemPedido> itemPedido;
 
     @Enumerated(EnumType.STRING)
     private SituacaoPedido situacaoPedido;
 
-    private BigDecimal percentualDesconto; //TODO aplicável somente em produtos (isService == false), no valor total do pedido;
+    private BigDecimal percentualDesconto;
 
     private BigDecimal valorPedido;
-
-    public static PedidoResponse toResponse(Pedido pedido) {
-        return PedidoResponse.builder()
-                .id(pedido.getId())
-                .itemPedido(pedido.getItemPedido())
-                .situacaoPedido(pedido.getSituacaoPedido())
-                .percentualDesconto(pedido.getPercentualDesconto())
-                .build();
-    }
 }

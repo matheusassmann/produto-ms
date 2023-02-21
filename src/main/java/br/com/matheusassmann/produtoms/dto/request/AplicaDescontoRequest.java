@@ -14,7 +14,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class AplicarDescontoRequest {
+public class AplicaDescontoRequest {
 
     private UUID id;
     private BigDecimal percentualDesconto;
