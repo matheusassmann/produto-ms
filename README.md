@@ -56,10 +56,10 @@ Endpoints disponíveis na aplicação:
 
 ## Pedido
 ### GET
-- http://localhost/api/v1/pedidos
-- http://localhost/api/v1/pedidos/{id}
+- http://localhost:9999/api/v1/pedidos
+- http://localhost:9999/api/v1/pedidos/{id}
 ### POST
-- http://localhost/api/v1/pedidos/criarPedido
+- http://localhost:9999/api/v1/pedidos/criarPedido
 ```
 // Request Body
 {
@@ -75,17 +75,17 @@ Endpoints disponíveis na aplicação:
     ]
 }
 ```
-- http://localhost/api/v1/pedidos/finalizarPedido/{id}
-- http://localhost/api/v1/pedidos/aplicarDesconto
+- http://localhost:9999/api/v1/pedidos/finalizarPedido/{id}
+- http://localhost:9999/api/v1/pedidos/aplicarDesconto
 ```
 // Request Body
 {
     "id": "b0c2c961-58e7-4b5c-b842-71f247478966",
-    "percentualDesconto": 20.00
+    "percentualDesconto": 20
 }
 ```
 ### PUT
-- http://localhost/api/v1/pedidos/{id}
+- http://localhost:9999/api/v1/pedidos/{id}
 ```
 // Request Body
 {
@@ -106,10 +106,8 @@ Endpoints disponíveis na aplicação:
 }
 ```
 ### DELETE
-- http://localhost/api/v1/pedidos/{id}
+- http://localhost:9999/api/v1/pedidos/{id}
 
 ## Observações
 - Antes de executar o docker-compose, certifique-se que as portas 5432 e 9999 estão disponíveis.
-- Para facilitar os testes, o DB iniciará populado com alguns dados.
-
-
+- Para facilitar os testes, o DB iniciará populado com alguns dados
