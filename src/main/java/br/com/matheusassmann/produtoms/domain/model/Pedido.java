@@ -47,12 +47,13 @@ public class Pedido {
 
     private BigDecimal valorPedido;
 
-    public static PedidoResponse toResponse(Pedido pedido) {
-        return PedidoResponse.builder()
-                .id(pedido.getId())
-                .itemPedido(pedido.getItemPedido())
-                .situacaoPedido(pedido.getSituacaoPedido())
-                .percentualDesconto(pedido.getPercentualDesconto())
-                .build();
-    }
+
+//    public static PedidoResponse toResponse(Pedido pedido) {
+//        return PedidoResponse.builder()
+//                .id(pedido.getId())
+//                .itemPedido(pedido.getItemPedido())
+//                .situacaoPedido(pedido.getSituacaoPedido())
+//                .percentualDesconto(pedido.getPercentualDesconto())
+//                .build();
+//    }
 }

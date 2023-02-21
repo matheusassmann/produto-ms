@@ -3,6 +3,7 @@ package br.com.matheusassmann.produtoms.service;
 import br.com.matheusassmann.produtoms.domain.enums.SituacaoPedido;
 import br.com.matheusassmann.produtoms.domain.model.ItemPedido;
 import br.com.matheusassmann.produtoms.domain.model.Pedido;
+import br.com.matheusassmann.produtoms.dto.request.AplicarDescontoRequest;
 import br.com.matheusassmann.produtoms.dto.request.FinalizarPedidoRequest;
 import br.com.matheusassmann.produtoms.dto.request.PedidoRequest;
 import br.com.matheusassmann.produtoms.exceptions.ProdutoNotFoundException;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -54,8 +57,8 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    public Pedido update(Pedido pedido, UUID id) {
-        findById(id);
+    public Pedido update(UUID id) {
+        Pedido pedido = findById(id);
         pedido.setId(id);
         return pedidoRepository.save(pedido);
     }
@@ -69,6 +72,15 @@ public class PedidoService {
     public void finalizar(FinalizarPedidoRequest finalizarPedidoRequest) {
         Pedido pedido = findById(finalizarPedidoRequest.getId());
         pedido.setSituacaoPedido(SituacaoPedido.FECHADO);
+        pedidoRepository.save(pedido);
+    }
+
+    public void aplicarDesconto(AplicarDescontoRequest aplicarDescontoRequest) {
+        Pedido pedido = findById(aplicarDescontoRequest.getId());
+        pedido.setPercentualDesconto(aplicarDescontoRequest.getPercentualDesconto().setScale(2, RoundingMode.HALF_EVEN));
+        var valorDesconto = pedido.getValorPedido().multiply(aplicarDescontoRequest.getPercentualDesconto().divide(BigDecimal.valueOf(100)));
+        var novoValor = pedido.getValorPedido().subtract(valorDesconto).setScale(2, RoundingMode.HALF_EVEN);
+        pedido.setValorPedido(novoValor);
         pedidoRepository.save(pedido);
     }
 }

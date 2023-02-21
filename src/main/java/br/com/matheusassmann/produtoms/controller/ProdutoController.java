@@ -4,8 +4,6 @@ import br.com.matheusassmann.produtoms.domain.model.Produto;
 import br.com.matheusassmann.produtoms.dto.request.ProdutoRequest;
 import br.com.matheusassmann.produtoms.dto.response.ProdutoResponse;
 import br.com.matheusassmann.produtoms.service.ProdutoService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,14 +24,12 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/produtos")
-@Api(value = "Produtos")
 public class ProdutoController {
 
     @Autowired
     private ProdutoService service;
 
     @PostMapping()
-    @ApiOperation(value = "Insert() Produto")
     public ResponseEntity<ProdutoResponse> insert(@RequestBody @Valid ProdutoRequest produtoRequest, UriComponentsBuilder uriBuilder) {
         Produto product = service.save(produtoRequest);
         URI uri = uriBuilder.path("/produtos/{id}").buildAndExpand(product.getId()).toUri();
@@ -41,7 +37,6 @@ public class ProdutoController {
     }
 
     @GetMapping()
-    @ApiOperation(value = "ListAll() Produtos")
     public ResponseEntity<Page<ProdutoResponse>> findAll(Pageable pageable) {
         Page<ProdutoResponse> response = service.findAll(pageable)
                 .map(Produto::toResponse);
@@ -49,14 +44,12 @@ public class ProdutoController {
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "FindById() Produto")
     public ResponseEntity<ProdutoResponse> findById(@PathVariable UUID id) {
         Produto product = service.findById(id);
         return ResponseEntity.ok().body(Produto.toResponse(product));
     }
 
     @PutMapping("/{id}")
-    @ApiOperation(value = "Update() Produto")
     public ResponseEntity<ProdutoResponse> update(@RequestBody @Valid ProdutoRequest productRequest, @PathVariable UUID id, UriComponentsBuilder uriBuilder) {
         Produto obj = service.update(Produto.from(productRequest), id);
         URI uri = uriBuilder.path("/produtos/{id}").buildAndExpand(productRequest.getId()).toUri();
@@ -64,7 +57,6 @@ public class ProdutoController {
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "Delete() Produto")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         service.delete(id);
         return ResponseEntity.ok().build();
