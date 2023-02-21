@@ -1,5 +1,6 @@
 package br.com.matheusassmann.produtoms.dto.request;
 
+import br.com.matheusassmann.produtoms.domain.enums.SituacaoProduto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

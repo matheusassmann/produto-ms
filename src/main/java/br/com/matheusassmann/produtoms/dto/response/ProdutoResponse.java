@@ -1,6 +1,7 @@
 package br.com.matheusassmann.produtoms.dto.response;
 
 import br.com.matheusassmann.produtoms.domain.enums.SituacaoProduto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,5 +23,6 @@ public class ProdutoResponse {
     private String descricao;
     private BigDecimal preco;
     private Boolean isService;
+    @JsonIgnore
     private SituacaoProduto situacaoProduto;
 }

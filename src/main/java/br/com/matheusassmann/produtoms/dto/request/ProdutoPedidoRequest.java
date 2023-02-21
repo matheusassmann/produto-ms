@@ -17,5 +17,4 @@ public class ProdutoPedidoRequest {
 
     private UUID id;
     private Integer quantidade;
-
 }

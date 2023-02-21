@@ -1,8 +1,10 @@
 package br.com.matheusassmann.produtoms.controller;
 
+import br.com.matheusassmann.produtoms.config.interfaces.ApiPageable;
 import br.com.matheusassmann.produtoms.domain.model.Produto;
 import br.com.matheusassmann.produtoms.dto.request.ProdutoRequest;
 import br.com.matheusassmann.produtoms.dto.response.ProdutoResponse;
+import br.com.matheusassmann.produtoms.mapper.ProdutoMapper;
 import br.com.matheusassmann.produtoms.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -31,16 +34,17 @@ public class ProdutoController {
 
     @PostMapping()
     public ResponseEntity<ProdutoResponse> insert(@RequestBody @Valid ProdutoRequest produtoRequest, UriComponentsBuilder uriBuilder) {
-        Produto product = service.save(produtoRequest);
-        URI uri = uriBuilder.path("/produtos/{id}").buildAndExpand(product.getId()).toUri();
-        return ResponseEntity.created(uri).body(Produto.toResponse(product));
+        ProdutoResponse response = ProdutoMapper.INSTANCE.toProdutoResponse(service.save(produtoRequest));
+        URI uri = uriBuilder.path("/produtos/{id}").buildAndExpand(response.getId()).toUri();
+        return ResponseEntity.created(uri).body(response);
     }
 
     @GetMapping()
-    public ResponseEntity<Page<ProdutoResponse>> findAll(Pageable pageable) {
+    @ApiPageable
+    public ResponseEntity<Page<ProdutoResponse>> findAll(@ApiIgnore Pageable pageable) {
         Page<ProdutoResponse> response = service.findAll(pageable)
                 .map(Produto::toResponse);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")

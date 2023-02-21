@@ -67,10 +67,4 @@ public class Produto {
                 .situacaoProduto(produto.situacaoProduto)
                 .build();
     }
-
-    public static List<ProdutoResponse> toResponse(List<Produto> produtos) {
-        List<ProdutoResponse> listProdutos = new ArrayList<>();
-        produtos.forEach(product -> listProdutos.add(Produto.toResponse(product)));
-        return listProdutos;
-    }
 }

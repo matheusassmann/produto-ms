@@ -19,8 +19,4 @@ public class PedidoRequest {
     private UUID id;
 
     private List<ProdutoPedidoRequest> produtos;
-
-//    @Positive(message = "deve ser maior que 0 e um valor positivo")
-//    @NotNull(message = "nao pode ser nulo")
-//    private BigDecimal percentualDesconto;
 }
