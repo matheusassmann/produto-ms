@@ -29,5 +29,7 @@ public interface ProdutoMapper {
     @Mapping(target = "situacaoProduto", source = "produtoRequest.situacaoProduto")
     Produto toProduto(ProdutoRequest produtoRequest, UUID id);
 
+    ProdutoRequest toProdutoRequest(Produto produto);
+
     ProdutoResponse toProdutoResponse(Produto produto);
 }

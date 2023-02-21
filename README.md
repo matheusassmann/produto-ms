@@ -35,11 +35,22 @@ Endpoints disponíveis na aplicação:
     "nome": "Mousepad",
     "descricao": "Mousepad grande (50x30)",
     "preco": 99.99,
-    "isService": false
+    "isService": false,
+    "situacaoProduto": "ATIVO"
 }
 ```
 ### PUT
 - http://localhost:9999/api/v1/produtos/{id}
+```
+// Request Body
+{
+    "nome": "Mousepad-Pequeno",
+    "descricao": "Mousepad grande (30x25)",
+    "preco": 49.99,
+    "isService": false,
+    "situacaoProduto": "ATIVO"
+}
+```
 ### DELETE
 - http://localhost:9999/api/v1/produtos/{id}
 
@@ -75,6 +86,25 @@ Endpoints disponíveis na aplicação:
 ```
 ### PUT
 - http://localhost/api/v1/pedidos/{id}
+```
+// Request Body
+{
+    "produtos": [
+        {
+            "id": "9aac003f-669c-486e-b260-d7a8550e3cdf",
+            "quantidade": 2
+        },
+        {
+            "id": "3a76a106-363f-4ab8-98ff-2947ad98c6fd",
+            "quantidade": 3
+        },
+        {
+            "id": "3317fda8-45e8-4687-95b0-1ebfb420aa7f",
+            "quantidade": 3
+        }
+    ]
+}
+```
 ### DELETE
 - http://localhost/api/v1/pedidos/{id}
 

@@ -5,7 +5,6 @@ import br.com.matheusassmann.produtoms.dto.request.ProdutoRequest;
 import br.com.matheusassmann.produtoms.exceptions.ObjetoNotFoundException;
 import br.com.matheusassmann.produtoms.mapper.ProdutoMapper;
 import br.com.matheusassmann.produtoms.repository.ProdutoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,8 +14,11 @@ import java.util.UUID;
 @Service
 public class ProdutoService {
 
-    @Autowired
-    private ProdutoRepository produtoRepository;
+    private final ProdutoRepository produtoRepository;
+
+    public ProdutoService(ProdutoRepository produtoRepository) {
+        this.produtoRepository = produtoRepository;
+    }
 
     public Produto findById(UUID id) {
         return produtoRepository.findByIdAndSituacaoProdutoIsNotInativo(id).orElseThrow(() -> new ObjetoNotFoundException("Produto nao encontrado!"));

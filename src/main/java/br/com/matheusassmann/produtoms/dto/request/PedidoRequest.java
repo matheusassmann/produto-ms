@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,5 +19,6 @@ public class PedidoRequest {
 
     private UUID id;
 
+    @NotNull(message = "lista de produtos nao pode ser vazia")
     private List<ProdutoPedidoRequest> produtos;
 }

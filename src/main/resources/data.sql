@@ -9,5 +9,3 @@ INSERT INTO PRODUTOS (id, nome, descricao, preco, is_service, situacao_produto) 
 INSERT INTO PRODUTOS (id, nome, descricao, preco, is_service, situacao_produto) VALUES ('9aac003f-669c-486e-b260-d7a8550e3cdf', 'SSD', 'NvmE 480gb', 780.00, false, 'ATIVO');
 INSERT INTO PRODUTOS (id, nome, descricao, preco, is_service, situacao_produto) VALUES ('3a76a106-363f-4ab8-98ff-2947ad98c6fd', 'Monitor', '27 Curvo 144hz' , 2199.60, false, 'ATIVO');
 INSERT INTO PRODUTOS (id, nome, descricao, preco, is_service, situacao_produto) VALUES ('67e90dbc-b1da-11ed-afa1-0242ac120002', 'Assistência Técnica', 'Serviços Gerais em PC' , 200.00, true, 'ATIVO');
-
---INSERT INTO PEDIDOS (id, item_pedido, situacao_pedido, percentual_desconto, valor_pedido) VALUES ()
