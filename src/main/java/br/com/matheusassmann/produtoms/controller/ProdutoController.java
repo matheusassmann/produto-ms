@@ -4,6 +4,7 @@ import br.com.matheusassmann.produtoms.dto.request.ProdutoRequest;
 import br.com.matheusassmann.produtoms.dto.response.ProdutoResponse;
 import br.com.matheusassmann.produtoms.mapper.ProdutoMapper;
 import br.com.matheusassmann.produtoms.service.ProdutoService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/produtos")
+@Api(tags = "Produtos")
 public class ProdutoController {
 
     @Autowired

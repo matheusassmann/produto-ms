@@ -26,7 +26,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/pedidos")
-@Api(value = "Pedidos")
+@Api(tags = "Pedidos")
 public class PedidoController {
 
     @Autowired
